@@ -26,14 +26,14 @@ router.post("/login", async (req, res) => {
     if (!foundUser) {
       res.status(400).json({ errorMessage: "invalid" });
     } else {
-      const matchUser = bcryptjs.compareSync(
+      const doesPassMatch = bcryptjs.compareSync(
         req.body.password,
         foundUser.password
       );
-      if (!matchUser) {
+      if (!doesPassMatch) {
         res.status(403).json({ errorMessage: "invalid" });
       } else {
-        const data = { _id: matchUser._id, username: matchUser.username };
+        const data = { _id: foundUser._id, username: foundUser.username };
         const authToken = jwt.sign(data, process.env.TOKEN_SECRET, {
           algorithm: "HS256",
           expiresIn: "24h",

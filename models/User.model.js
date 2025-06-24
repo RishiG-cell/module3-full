@@ -20,7 +20,7 @@ const userSchema = new Schema(
       required: [true, "Password is required."],
     },
     country: String,
-    profileImage: String,
+    image: String,
     liked: [String],
   },
   {
