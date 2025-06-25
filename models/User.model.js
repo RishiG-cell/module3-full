@@ -21,7 +21,7 @@ const userSchema = new Schema(
     },
     country: String,
     image: String,
-    liked: [String],
+    posts: { type: Schema.Types.ObjectId, ref: "posts" },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
