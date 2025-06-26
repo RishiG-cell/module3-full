@@ -20,7 +20,11 @@ const userSchema = new Schema(
       required: [true, "Password is required."],
     },
     country: String,
-    image: String,
+    image: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dgtp5s2en/image/upload/v1750930755/tvgjxftaptrpdp3tuyvy.png",
+    },
     posts: { type: Schema.Types.ObjectId, ref: "posts" },
   },
   {

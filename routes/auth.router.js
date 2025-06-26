@@ -3,22 +3,29 @@ const Usermodel = require("../models/User.model");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require("../middelware/jwt.middelware");
+const uploader = require("../middelware/cloudinary.config");
 
-router.post("/signup", async (req, res) => {
-  try {
-    const theSalt = bcryptjs.genSaltSync(12);
-    const hashedPassword = bcryptjs.hashSync(req.body.password, theSalt);
+router.post(
+  "/signup",
 
-    const newUser = await Usermodel.create({
-      ...req.body,
-      password: hashedPassword,
-    });
-    res.status(200).json(newUser);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+  uploader.single("imageUrl"),
+  async (req, res) => {
+    try {
+      const theSalt = bcryptjs.genSaltSync(12);
+      const hashedPassword = bcryptjs.hashSync(req.body.password, theSalt);
+      console.log(req.file);
+      const newUser = await Usermodel.create({
+        ...req.body,
+        password: hashedPassword,
+        image: req.file?.path,
+      });
+      res.status(200).json(newUser);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
+    }
   }
-});
+);
 
 router.post("/login", async (req, res) => {
   try {
