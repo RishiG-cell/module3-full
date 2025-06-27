@@ -16,11 +16,11 @@ router.post("/create", uploader.single("imageUrl"), async (req, res) => {
   }
 });
 
-router.put("update/:postId", async (req, res) => {
+router.put("update/:postId", uploader.single("imageUrl"), async (req, res) => {
   try {
     const updatedPost = await postModel.findByIdAndUpdate(
       req.params.postId,
-      req.body,
+      { ...req.body, image: req.file?.path },
       { new: true }
     );
     res.status(200).json(updatedPost);
@@ -59,6 +59,7 @@ router.get("/feed/:userId", async (req, res) => {
 router.delete("/delete/:postId", async (req, res) => {
   try {
     const deletedPost = await postModel.findByIdAndDelete(req.params.postId);
+
     res.status(200).json(deletedPost, { new: true });
   } catch (error) {
     console.log(error);

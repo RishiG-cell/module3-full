@@ -1,5 +1,5 @@
 const Usermodel = require("../models/User.model");
-
+const uploader = require("../middelware/cloudinary.config");
 const router = require("express").Router();
 
 router.get("/user/:userId", async (req, res) => {
@@ -12,10 +12,10 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
-router.put("update/:userId", async (req, res) => {
+router.put("/update/:userId", uploader.single("imageUrl"), async (req, res) => {
   try {
     const updatedUser = await Usermodel.findByIdAndUpdate(
-      req.params.postId,
+      req.params.userId,
       req.body,
       { image: req.file?.path },
       { new: true }
