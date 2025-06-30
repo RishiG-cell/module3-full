@@ -35,7 +35,7 @@ router.get("/feed", async (req, res) => {
     const allPosts = await postModel
       .find()
       .populate("user", "username")
-      .select("username image post")
+      .select("username image post likes")
       .sort({ createdAt: -1 });
     res.status(200).json(allPosts);
   } catch (error) {
@@ -64,6 +64,25 @@ router.delete("/delete/:postId", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json(error, { errorMessage: "not succesful" });
+  }
+});
+
+router.post("/liked/:postId", async (req, res) => {
+  try {
+    const Liked = await postModel
+      .findByIdAndUpdate(
+        req.params.postId,
+        {
+          $inc: { likes: 1 },
+        },
+        { new: true }
+      )
+      .populate("user", "username")
+      .select("username image post likes");
+    res.status(201).json(Liked);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error, { errorMessage: "notliked" });
   }
 });
 

@@ -1,10 +1,31 @@
 const router = require("express").Router();
 const commentModel = require("../models/Comment.model");
+const postModel = require("../models/Post.model");
+
+router.get("/onepost/:postId", async (req, res) => {
+  try {
+    const getOnePost = await postModel
+      .findById(req.params.postId)
+      .populate("comments");
+    res.status(200).json(getOnePost);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+});
 
 router.post("/create", async (req, res) => {
   try {
     const newComment = await commentModel.create(req.body);
-    res.status(201).json(newComment);
+    const updatedPost = await postModel
+      .findByIdAndUpdate(
+        req.body.postId,
+        { $push: { comments: newComment._id } },
+        { new: true }
+      )
+      .populate("comments");
+    console.log(updatedPost);
+    res.status(201).json(updatedPost);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
