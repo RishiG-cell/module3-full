@@ -26,6 +26,10 @@ const userSchema = new Schema(
         "https://res.cloudinary.com/dgtp5s2en/image/upload/v1750930755/tvgjxftaptrpdp3tuyvy.png",
     },
     posts: { type: Schema.Types.ObjectId, ref: "posts" },
+    spotify: {
+      type: String,
+      default: "https://open.spotify.com/playlist/37i9dQZF1DZ06evO3mC78G",
+    },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
