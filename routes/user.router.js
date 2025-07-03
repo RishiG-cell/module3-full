@@ -14,10 +14,10 @@ router.get("/user/:userId", async (req, res) => {
 
 router.put("/update/:userId", uploader.single("imageUrl"), async (req, res) => {
   try {
+    console.log(req.file);
     const updatedUser = await Usermodel.findByIdAndUpdate(
       req.params.userId,
-      req.body,
-      { image: req.file?.path },
+      { ...req.body, image: req.file?.path },
       { new: true }
     );
     res.status(200).json(updatedUser);
